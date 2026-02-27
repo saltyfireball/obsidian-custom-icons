@@ -1,0 +1,9 @@
+{
+	"id": "custom-icons",
+	"name": "Custom Icon Manager",
+	"version": "1.0.0",
+	"minAppVersion": "1.0.0",
+	"description": "Manage a custom icon library for use across Obsidian plugins. Provides icons via CSS variables and a global API.",
+	"author": "saltyfireball",
+	"isDesktopOnly": false
+}
