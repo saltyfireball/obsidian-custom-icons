@@ -60,7 +60,7 @@ export class AddIconModal extends Modal {
 			type: "text",
 			placeholder: "e.g., book, django, my-icon",
 			value: this.iconData.id,
-		}) as HTMLInputElement;
+		});
 		idInput.addEventListener("input", (event: Event) => {
 			const target = event.target as HTMLInputElement | null;
 			if (!target) return;
@@ -72,12 +72,12 @@ export class AddIconModal extends Modal {
 
 		// Name field
 		const nameRow = contentEl.createDiv("sf-form-row");
-		nameRow.createEl("label", { text: "Display Name" });
+		nameRow.createEl("label", { text: "Display name" });
 		const nameInput = nameRow.createEl("input", {
 			type: "text",
 			placeholder: "e.g., Book, Django Logo",
 			value: this.iconData.name,
-		}) as HTMLInputElement;
+		});
 		nameInput.addEventListener("input", (event: Event) => {
 			const target = event.target as HTMLInputElement | null;
 			if (!target) return;
@@ -86,12 +86,12 @@ export class AddIconModal extends Modal {
 
 		// File upload
 		const uploadRow = contentEl.createDiv("sf-form-row");
-		uploadRow.createEl("label", { text: "Upload Icon File" });
+		uploadRow.createEl("label", { text: "Upload icon file" });
 		const fileInput = uploadRow.createEl("input", {
 			type: "file",
 			attr: { accept: ".svg,.png,.jpg,.jpeg,.gif,.webp,image/*" },
-		}) as HTMLInputElement;
-		fileInput.addEventListener("change", async (event: Event) => {
+		});
+		fileInput.addEventListener("change", (event: Event) => {
 			const target = event.target as HTMLInputElement | null;
 			const file = target?.files?.[0];
 			if (!file) return;
@@ -137,11 +137,11 @@ export class AddIconModal extends Modal {
 
 		// Data URL field (manual entry)
 		const urlRow = contentEl.createDiv("sf-form-row");
-		urlRow.createEl("label", { text: "Or paste Data URL" });
+		urlRow.createEl("label", { text: "Or paste data URL" });
 		const urlInput = urlRow.createEl("textarea", {
 			placeholder:
 				'url("data:image/svg+xml;base64,...") or data:image/svg+xml;base64,...',
-		}) as HTMLTextAreaElement;
+		});
 		urlInput.value = this.iconData.dataUrl;
 		urlInput.addEventListener("input", (event: Event) => {
 			const target = event.target as HTMLTextAreaElement | null;
@@ -156,10 +156,10 @@ export class AddIconModal extends Modal {
 
 		// Is Colored toggle
 		const coloredRow = contentEl.createDiv("sf-form-row sf-toggle-row");
-		coloredRow.createEl("label", { text: "Full Color Icon" });
+		coloredRow.createEl("label", { text: "Full color icon" });
 		const coloredToggle = coloredRow.createEl("input", {
 			type: "checkbox",
-		}) as HTMLInputElement;
+		});
 		coloredToggle.checked = this.iconData.isColored;
 		coloredToggle.addEventListener("change", (event: Event) => {
 			const target = event.target as HTMLInputElement | null;
@@ -168,18 +168,18 @@ export class AddIconModal extends Modal {
 			this.updatePreview(previewEl);
 		});
 		coloredRow.createEl("span", {
-			text: "Enable for colored icons (PNG, colored SVG). Disable for monochrome SVGs.",
+			text: "Enable for colored icons (PNG, colored SVG), disable for monochrome icons",
 			cls: "sf-hint",
 		});
 
 		// Background Size
 		const bgSizeRow = contentEl.createDiv("sf-form-row");
-		bgSizeRow.createEl("label", { text: "Icon Size (optional)" });
+		bgSizeRow.createEl("label", { text: "Icon size (optional)" });
 		const bgSizeInput = bgSizeRow.createEl("input", {
 			type: "text",
 			placeholder: "e.g., 120% (zoom in), 90% (smaller), 70%",
 			value: this.iconData.backgroundSize || "",
-		}) as HTMLInputElement;
+		});
 		bgSizeRow.createEl("span", {
 			text: "100% = full size, 120% = zoomed/larger, 80% = smaller with padding",
 			cls: "sf-hint",
@@ -194,13 +194,13 @@ export class AddIconModal extends Modal {
 		// Border Radius (colored icons only)
 		const borderRadiusRow = contentEl.createDiv("sf-form-row");
 		borderRadiusRow.createEl("label", {
-			text: "Border Radius (colored icons)",
+			text: "Border radius (colored icons)",
 		});
 		const borderRadiusInput = borderRadiusRow.createEl("input", {
 			type: "text",
 			placeholder: "e.g., 3px, 50% for circle",
 			value: this.iconData.borderRadius || "",
-		}) as HTMLInputElement;
+		});
 		borderRadiusRow.createEl("span", {
 			text: "Rounds corners of colored icons. Has no effect on monochrome icons.",
 			cls: "sf-hint",
@@ -225,7 +225,7 @@ export class AddIconModal extends Modal {
 			text: "Save",
 			cls: "mod-cta",
 		});
-		saveBtn.addEventListener("click", () => this.save());
+		saveBtn.addEventListener("click", () => { void this.save(); });
 
 		const cancelBtn = actions.createEl("button", { text: "Cancel" });
 		cancelBtn.addEventListener("click", () => this.close());
@@ -251,69 +251,24 @@ export class AddIconModal extends Modal {
 		}
 
 		if (this.iconData.isColored) {
-			preview.style.setProperty(
-				"background-image",
-				this.iconData.dataUrl,
-				"important",
-			);
-			preview.style.setProperty("background-size", bgSize, "important");
-			preview.style.setProperty(
-				"background-repeat",
-				"no-repeat",
-				"important",
-			);
-			preview.style.setProperty(
-				"background-position",
-				"center",
-				"important",
-			);
-			preview.style.setProperty(
-				"-webkit-mask-image",
-				"none",
-				"important",
-			);
-			preview.style.setProperty("mask-image", "none", "important");
+			preview.addClass("sf-preview-colored");
+			preview.setCssProps({
+				"--sf-preview-bg-image": this.iconData.dataUrl,
+				"--sf-preview-bg-size": bgSize,
+			});
 		} else {
-			preview.style.setProperty(
-				"-webkit-mask-image",
-				this.iconData.dataUrl,
-				"important",
-			);
-			preview.style.setProperty(
-				"mask-image",
-				this.iconData.dataUrl,
-				"important",
-			);
-			preview.style.setProperty("-webkit-mask-size", bgSize, "important");
-			preview.style.setProperty("mask-size", bgSize, "important");
-			preview.style.setProperty(
-				"-webkit-mask-repeat",
-				"no-repeat",
-				"important",
-			);
-			preview.style.setProperty("mask-repeat", "no-repeat", "important");
-			preview.style.setProperty(
-				"-webkit-mask-position",
-				"center",
-				"important",
-			);
-			preview.style.setProperty("mask-position", "center", "important");
-			preview.style.setProperty(
-				"background-color",
-				"var(--text-normal)",
-				"important",
-			);
+			preview.addClass("sf-preview-mono");
+			preview.setCssProps({
+				"--sf-preview-mask-image": this.iconData.dataUrl,
+				"--sf-preview-mask-size": bgSize,
+			});
 		}
 
 		if (borderRadius) {
-			preview.style.setProperty(
-				"border-radius",
-				borderRadius,
-				"important",
-			);
-			if (this.iconData.isColored) {
-				preview.style.setProperty("overflow", "hidden", "important");
-			}
+			preview.addClass("sf-preview-rounded");
+			preview.setCssProps({
+				"--sf-preview-border-radius": borderRadius,
+			});
 		}
 	}
 

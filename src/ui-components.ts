@@ -59,11 +59,15 @@ export function renderIconPickerGrid({
 
 			const preview = btn.createDiv("sf-icon-preview");
 			if (icon.isColored) {
-				preview.style.backgroundImage = icon.dataUrl;
+				preview.addClass("sf-icon-colored");
+				preview.setCssProps({
+					"--sf-item-bg-image": icon.dataUrl,
+				});
 			} else {
-				preview.style.webkitMaskImage = icon.dataUrl;
-				preview.style.maskImage = icon.dataUrl;
-				preview.style.backgroundColor = "var(--text-normal)";
+				preview.addClass("sf-icon-mono");
+				preview.setCssProps({
+					"--sf-item-mask-image": icon.dataUrl,
+				});
 			}
 
 			if (selectedId === icon.id) {

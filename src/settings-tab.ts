@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting } from "obsidian";
+import { App, PluginSettingTab } from "obsidian";
 import type IconManagerPlugin from "./main";
 import { AddIconModal } from "./modals";
 
@@ -15,14 +15,14 @@ export class IconManagerSettingTab extends PluginSettingTab {
 		containerEl.empty();
 		containerEl.addClass("sf-settings");
 
-		new Setting(containerEl).setName("Custom icon manager").setHeading();
+		;
 		containerEl.createEl("p", {
 			text: "Manage your icon library. Icons are exposed as CSS variables (--sf-icon-{id}) and via the window.SFIconManager API for other plugins to consume.",
 			cls: "sf-hint",
 		});
 
 		const addIconBtn = containerEl.createEl("button", {
-			text: "+ Add Icon",
+			text: "Add icon",
 		});
 		addIconBtn.addEventListener("click", () => {
 			new AddIconModal(this.app, this.plugin).open();
@@ -74,11 +74,15 @@ export class IconManagerSettingTab extends PluginSettingTab {
 
 					const preview = item.createDiv("sf-icon-item-preview");
 					if (icon.isColored) {
-						preview.style.backgroundImage = icon.dataUrl;
+						preview.addClass("sf-icon-colored");
+						preview.setCssProps({
+							"--sf-item-bg-image": icon.dataUrl,
+						});
 					} else {
-						preview.style.webkitMaskImage = icon.dataUrl;
-						preview.style.maskImage = icon.dataUrl;
-						preview.style.backgroundColor = "var(--text-normal)";
+						preview.addClass("sf-icon-mono");
+						preview.setCssProps({
+							"--sf-item-mask-image": icon.dataUrl,
+						});
 					}
 
 					const info = item.createDiv("sf-icon-item-info");
@@ -104,8 +108,9 @@ export class IconManagerSettingTab extends PluginSettingTab {
 						text: "Delete",
 						cls: "mod-warning",
 					});
-					deleteBtn.addEventListener("click", async () => {
+					deleteBtn.addEventListener("click", () => {
 						if (
+							// eslint-disable-next-line no-alert -- simple confirmation before destructive action
 							confirm(
 								`Delete icon "${icon.name || icon.id}"?`,
 							)
@@ -114,8 +119,9 @@ export class IconManagerSettingTab extends PluginSettingTab {
 								this.plugin.settings.icons.filter(
 									(i) => i.id !== icon.id,
 								);
-							await this.plugin.saveIconSettings();
-							this.display();
+							void this.plugin.saveIconSettings().then(() => {
+								this.display();
+							});
 						}
 					});
 				}

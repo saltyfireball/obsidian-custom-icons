@@ -21,7 +21,8 @@ export default class IconManagerPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
-		// Inject CSS variables for icons
+		// Inject CSS variables for icons (must be dynamic - icon data URLs are user-defined at runtime)
+		// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic CSS variables for user-uploaded icons cannot use static styles.css
 		this.styleEl = document.createElement("style");
 		this.styleEl.id = "sf-icon-manager-styles";
 		document.head.appendChild(this.styleEl);
@@ -92,7 +93,9 @@ export default class IconManagerPlugin extends Plugin {
 	}
 
 	async loadSettings() {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- loadData returns any
 		const savedData = await this.loadData();
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- merging with loadData result
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, savedData || {});
 		if (!Array.isArray(this.settings.icons)) {
 			this.settings.icons = [];

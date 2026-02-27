@@ -1,0 +1,55 @@
+/* Preview icon - colored mode */
+.sf-preview-icon.sf-preview-colored {
+	background-image: var(--sf-preview-bg-image) !important;
+	background-size: var(--sf-preview-bg-size, contain) !important;
+	background-repeat: no-repeat !important;
+	background-position: center !important;
+	-webkit-mask-image: none !important;
+	mask-image: none !important;
+}
+
+/* Preview icon - monochrome mode */
+.sf-preview-icon.sf-preview-mono {
+	-webkit-mask-image: var(--sf-preview-mask-image) !important;
+	mask-image: var(--sf-preview-mask-image) !important;
+	-webkit-mask-size: var(--sf-preview-mask-size, contain) !important;
+	mask-size: var(--sf-preview-mask-size, contain) !important;
+	-webkit-mask-repeat: no-repeat !important;
+	mask-repeat: no-repeat !important;
+	-webkit-mask-position: center !important;
+	mask-position: center !important;
+	background-color: var(--text-normal) !important;
+}
+
+/* Preview icon - border radius */
+.sf-preview-icon.sf-preview-rounded {
+	border-radius: var(--sf-preview-border-radius) !important;
+}
+
+.sf-preview-icon.sf-preview-colored.sf-preview-rounded {
+	overflow: hidden !important;
+}
+
+/* Settings icon item preview - colored */
+.sf-icon-item-preview.sf-icon-colored {
+	background-image: var(--sf-item-bg-image);
+}
+
+/* Settings icon item preview - monochrome */
+.sf-icon-item-preview.sf-icon-mono {
+	mask-image: var(--sf-item-mask-image);
+	-webkit-mask-image: var(--sf-item-mask-image);
+	background-color: var(--text-normal);
+}
+
+/* Icon picker grid preview - colored */
+.sf-icon-preview.sf-icon-colored {
+	background-image: var(--sf-item-bg-image);
+}
+
+/* Icon picker grid preview - monochrome */
+.sf-icon-preview.sf-icon-mono {
+	mask-image: var(--sf-item-mask-image);
+	-webkit-mask-image: var(--sf-item-mask-image);
+	background-color: var(--text-normal);
+}
