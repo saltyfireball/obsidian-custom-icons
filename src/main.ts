@@ -93,10 +93,8 @@ export default class IconManagerPlugin extends Plugin {
 	}
 
 	async loadSettings() {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- loadData returns any
-		const savedData = await this.loadData();
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- merging with loadData result
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, savedData || {});
+		const savedData = (await this.loadData()) as Partial<IconManagerSettings> | null;
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, savedData ?? {});
 		if (!Array.isArray(this.settings.icons)) {
 			this.settings.icons = [];
 		}
