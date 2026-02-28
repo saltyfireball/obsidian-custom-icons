@@ -1,4 +1,4 @@
-import { App, PluginSettingTab } from "obsidian";
+import { App, Modal, PluginSettingTab, Setting } from "obsidian";
 import type IconManagerPlugin from "./main";
 import { AddIconModal } from "./modals";
 
@@ -109,20 +109,19 @@ export class IconManagerSettingTab extends PluginSettingTab {
 						cls: "mod-warning",
 					});
 					deleteBtn.addEventListener("click", () => {
-						if (
-							// eslint-disable-next-line no-alert -- simple confirmation before destructive action
-							confirm(
-								`Delete icon "${icon.name || icon.id}"?`,
-							)
-						) {
-							this.plugin.settings.icons =
-								this.plugin.settings.icons.filter(
-									(i) => i.id !== icon.id,
-								);
-							void this.plugin.saveIconSettings().then(() => {
-								this.display();
-							});
-						}
+						new ConfirmModal(
+							this.app,
+							`Delete icon "${icon.name || icon.id}"?`,
+							() => {
+								this.plugin.settings.icons =
+									this.plugin.settings.icons.filter(
+										(i) => i.id !== icon.id,
+									);
+								void this.plugin.saveIconSettings().then(() => {
+									this.display();
+								});
+							},
+						).open();
 					});
 				}
 			}
@@ -136,4 +135,18 @@ export class IconManagerSettingTab extends PluginSettingTab {
 
 		renderIconList();
 	}
+}
+
+class ConfirmModal extends Modal {
+	private resolved = false;
+	constructor(app: App, private message: string, private onConfirm: () => void) {
+		super(app);
+	}
+	onOpen() {
+		this.contentEl.createEl("p", { text: this.message });
+		new Setting(this.contentEl)
+			.addButton(b => b.setButtonText("Confirm").setCta().onClick(() => { this.resolved = true; this.close(); this.onConfirm(); }))
+			.addButton(b => b.setButtonText("Cancel").onClick(() => this.close()));
+	}
+	onClose() { this.contentEl.empty(); }
 }

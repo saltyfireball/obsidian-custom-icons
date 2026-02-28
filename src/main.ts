@@ -15,17 +15,15 @@ declare global {
 
 export default class IconManagerPlugin extends Plugin {
 	settings: IconManagerSettings = DEFAULT_SETTINGS;
-	private styleEl: HTMLStyleElement | null = null;
+	private styleSheet: CSSStyleSheet | null = null;
 	private changeCallbacks: Set<() => void> = new Set();
 
 	async onload() {
 		await this.loadSettings();
 
 		// Inject CSS variables for icons (must be dynamic - icon data URLs are user-defined at runtime)
-		// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic CSS variables for user-uploaded icons cannot use static styles.css
-		this.styleEl = document.createElement("style");
-		this.styleEl.id = "sf-icon-manager-styles";
-		document.head.appendChild(this.styleEl);
+		this.styleSheet = new CSSStyleSheet();
+		document.adoptedStyleSheets = [...document.adoptedStyleSheets, this.styleSheet];
 		this.updateIconCSS();
 
 		// Expose global API
@@ -44,10 +42,10 @@ export default class IconManagerPlugin extends Plugin {
 		// Remove global API
 		delete window.SFIconManager;
 
-		// Remove style element
-		if (this.styleEl) {
-			this.styleEl.remove();
-			this.styleEl = null;
+		// Remove stylesheet
+		if (this.styleSheet) {
+			document.adoptedStyleSheets = document.adoptedStyleSheets.filter(s => s !== this.styleSheet);
+			this.styleSheet = null;
 		}
 
 		// Clear change callbacks
@@ -80,7 +78,7 @@ export default class IconManagerPlugin extends Plugin {
 	}
 
 	updateIconCSS(): void {
-		if (!this.styleEl) return;
+		if (!this.styleSheet) return;
 
 		const lines: string[] = [];
 		lines.push(":root {");
@@ -89,7 +87,7 @@ export default class IconManagerPlugin extends Plugin {
 		}
 		lines.push("}");
 
-		this.styleEl.textContent = lines.join("\n");
+		this.styleSheet.replaceSync(lines.join("\n"));
 	}
 
 	async loadSettings() {
