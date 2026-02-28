@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-custom-icons",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Manage a custom icon library for use across Obsidian plugins.",
 	"main": "main.js",
 	"type": "module",
