@@ -38,7 +38,7 @@ export class AddIconModal extends Modal {
 					id: "",
 					name: "",
 					dataUrl: "",
-					isColored: false,
+					isColored: true,
 					backgroundSize: "",
 					borderRadius: "",
 				};

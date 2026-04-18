@@ -87,7 +87,6 @@ export class IconManagerSettingTab extends PluginSettingTab {
 
 					const info = item.createDiv("sf-icon-item-info");
 					info.createEl("strong", { text: icon.name || icon.id });
-					info.createEl("code", { text: icon.id });
 					if (icon.isColored) {
 						info.createEl("span", {
 							text: "(colored)",

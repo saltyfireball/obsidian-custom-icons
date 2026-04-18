@@ -1,3 +1,49 @@
+/* Add Icon modal - preview container */
+.sf-icon-preview-large {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 80px;
+}
+
+/* Add Icon modal - preview icon base */
+.sf-preview-icon {
+	width: 64px;
+	height: 64px;
+	display: block;
+}
+
+/* Settings icon list - item preview base */
+.sf-icon-item-preview {
+	width: 36px;
+	height: 36px;
+	flex-shrink: 0;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	mask-size: contain;
+	-webkit-mask-size: contain;
+	mask-repeat: no-repeat;
+	-webkit-mask-repeat: no-repeat;
+	mask-position: center;
+	-webkit-mask-position: center;
+}
+
+/* Icon picker grid - preview base */
+.sf-icon-preview {
+	width: 28px;
+	height: 28px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	mask-size: contain;
+	-webkit-mask-size: contain;
+	mask-repeat: no-repeat;
+	-webkit-mask-repeat: no-repeat;
+	mask-position: center;
+	-webkit-mask-position: center;
+}
+
 /* Preview icon - colored mode */
 .sf-preview-icon.sf-preview-colored {
 	background-image: var(--sf-preview-bg-image) !important;
